@@ -24,11 +24,12 @@ defmodule MobileFoodSodaClient.MixProject do
       preferred_cli_env: [
         coveralls: :test
       ],
-      deps: deps(),
-      aliases: aliases(),
       dialyzer: [
-        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
-      ]
+        plt_file: {:no_warn, "priv/plts/mobile_food_soda_client.plt"},
+        plt_core_path: "priv/plts/core.plt"
+      ],
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -60,7 +61,7 @@ defmodule MobileFoodSodaClient.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger]
     ]
   end
 
@@ -73,7 +74,7 @@ defmodule MobileFoodSodaClient.MixProject do
 
       # Dev dependencies
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.3", only: [:dev, :test], runtime: false}
     ]
   end
 

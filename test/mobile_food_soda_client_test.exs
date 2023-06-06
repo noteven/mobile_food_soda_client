@@ -5,7 +5,6 @@ defmodule MobileFoodSodaClientTest do
 
   describe "client" do
     test "" do
-
     end
   end
 end

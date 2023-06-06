@@ -12,38 +12,57 @@ jobs:
         name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
         strategy:
           matrix:
-            otp: ['25.3', '26.0']
-            elixir: ['1.14.x']
+            otp: ['25.3']
+            elixir: ['1.14']
         env:
-          MIX_ENV: test
+          MIX_ENV: "test"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         steps:
+          - uses: actions/checkout@v3
           - uses: erlef/setup-beam@v1
+            id: beam
             with:
               otp-version: ${{matrix.otp}}
               elixir-version: ${{matrix.elixir}}
-          - uses: actions/checkout@v3
 
-          - name: Cache Dependencies
-            uses: actions/cache@v3
-            id: deps-cache
+          - name: Restore PLT/dependencies cache
+            id: deps_plt_cache
+            uses: actions/cache/restore@v3
             with:
+              key: |
+                deps_plt-${{ runner.os }}-${{ steps.beam.outputs.otp-version }}-${{ steps.beam.outputs.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+              restore-keys: |
+                deps_plt-${{ runner.os }}-${{ steps.beam.outputs.otp-version }}-${{ steps.beam.outputs.elixir-version }}-
               path: |
                 deps
-              key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-              restore-keys: |
-                ${{ runner.os }}-mix-
+                priv/plts
+
           - name: Fetch Dependencies
-            if: steps.deps-cache.outputs.cache-hit != 'true'
+            if: steps.deps_plt_cache.outputs.cache-hit != 'true'
             run: |
-              mix deps.get, deps.compile
-          
+              mix do deps.get, deps.compile
+          - name: Create PLTs
+            if: steps.deps_plt_cache.outputs.cache-hit != 'true'
+            run: |
+              mix dialyzer --plt
+
+          - name: Save PLT/dependencies cache
+            id: deps_cache_save
+            uses: actions/cache/save@v3
+            if: steps.deps_plt_cache.outputs.cache-hit != 'true'
+            with:
+              key: |
+                deps_plt-${{ runner.os }}-${{ steps.beam.outputs.otp-version }}-${{ steps.beam.outputs.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+              path: |
+                deps
+                priv/plts
+
           - name: Compile (warning as errors)
             run: |
               mix compile --warnings-as-errors
 
           - name: Format
-            if: ${{ matrix.elixir == '1.14.x' }}
+            if: ${{ matrix.elixir == '1.14' }}
             run: |
               mix format --check-formatted
 
@@ -60,4 +79,5 @@ jobs:
               mix test --preload-modules --warnings-as-errors
 
           - name: Excoveralls
-            run: mix coveralls.github
+            run: |
+             mix coveralls.github
