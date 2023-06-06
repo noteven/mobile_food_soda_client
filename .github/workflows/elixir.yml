@@ -1,0 +1,63 @@
+name: Elixir CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+      test:
+        runs-on: ubuntu-latest
+        name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+        strategy:
+          matrix:
+            otp: ['25.3', '26.0']
+            elixir: ['1.14.x']
+        env:
+          MIX_ENV: test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        steps:
+          - uses: erlef/setup-beam@v1
+            with:
+              otp-version: ${{matrix.otp}}
+              elixir-version: ${{matrix.elixir}}
+          - uses: actions/checkout@v3
+
+          - name: Cache Dependencies
+            uses: actions/cache@v3
+            id: deps-cache
+            with:
+              path: |
+                deps
+              key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+              restore-keys: |
+                ${{ runner.os }}-mix-
+          - name: Fetch Dependencies
+            if: steps.deps-cache.outputs.cache-hit != 'true'
+            run: |
+              mix deps.get, deps.compile
+          
+          - name: Compile (warning as errors)
+            run: |
+              mix compile --warnings-as-errors
+
+          - name: Format
+            if: ${{ matrix.elixir == '1.14.x' }}
+            run: |
+              mix format --check-formatted
+
+          - name: Credo
+            run: |
+              mix credo --all --strict
+
+          - name: Dialyzer
+            run: |
+              mix dialyzer --format github
+
+          - name: Mix test
+            run: |
+              mix test --preload-modules --warnings-as-errors
+
+          - name: Excoveralls
+            run: mix coveralls.github
