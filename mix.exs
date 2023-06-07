@@ -26,7 +26,7 @@ defmodule MobileFoodSodaClient.MixProject do
       ],
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/mobile_food_soda_client.plt"},
-        plt_core_path: "priv/plts/core.plt"
+        plt_core_path: "priv/plts/"
       ],
       deps: deps(),
       aliases: aliases()

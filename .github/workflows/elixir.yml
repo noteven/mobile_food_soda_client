@@ -12,7 +12,7 @@ jobs:
         name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
         strategy:
           matrix:
-            otp: ['25.3']
+            otp: ['25.3', '26.0']
             elixir: ['1.14']
         env:
           MIX_ENV: "test"
