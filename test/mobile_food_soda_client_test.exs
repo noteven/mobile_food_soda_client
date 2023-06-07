@@ -4,7 +4,7 @@ defmodule MobileFoodSodaClientTest do
   use ExUnit.Case
 
   describe "client" do
-    test "" do
+    test "allows fetching food truck permits" do
     end
   end
 end
