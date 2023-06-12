@@ -3,7 +3,7 @@ defmodule MobileFoodSodaClient.MixProject do
 
   @description """
   Client library for accessing City of San Fanciscos SODA API for Mobile Food
-  Facility Permit data-set.
+  Facility Permit dataset.
   """
   @version "0.0.1"
   @repo_url "https://github.com/noteven/mobile_food_soda_client"
@@ -70,9 +70,8 @@ defmodule MobileFoodSodaClient.MixProject do
     [
       # Test dependencies
       {:hammox, "~> 0.7", only: [:test]},
-      {:propcheck, "~> 1.4", only: [:test]},
-      {:excoveralls, "~> 0.10", only: [:test]},
       {:csv, "~> 3.0", only: [:test]},
+      {:excoveralls, "~> 0.10", only: [:test]},
 
       # Dev dependencies
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
