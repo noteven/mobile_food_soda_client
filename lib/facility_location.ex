@@ -14,6 +14,8 @@ defmodule MobileFoodSodaClient.FacilityLocation do
   @type description() :: String.t() | nil
 
   @type t() :: %__MODULE__{
+          id: integer(),
+          address: String.t(),
           longitude: coordinate(),
           latitude: coordinate(),
           description: description()

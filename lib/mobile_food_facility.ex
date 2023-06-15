@@ -35,12 +35,9 @@ defmodule MobileFoodSodaClient.MobileFoodFacility do
 
   @enforce_keys [:location_id, :address, :facility_type]
   defstruct [
-    :location_id,
-    :address,
     :facility_type,
     :food_items,
     :location,
-    :parcel,
     :is_cold_truck
   ]
 end

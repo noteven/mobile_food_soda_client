@@ -17,7 +17,6 @@ defmodule MobileFoodSodaClient.FacilityPermit do
   Name of the applicant, this can be the name of an individual or business.
   """
   @type applicant() :: String.t()
-
   @type status() :: :requested | :expired | :suspended | :issued | :approved
   @type received_date :: NaiveDateTime.t()
   @type approved_date :: NaiveDateTime.t() | nil
@@ -47,6 +46,13 @@ defmodule MobileFoodSodaClient.FacilityPermit do
 
   @doc """
   Returns true if the permit has expired, or status is expired, false otherwise.
+
+    iex> alias MobileFoodSodaClient.FacilityPermit
+    ...> FacilityPermit.is_expired?(%FacilityPermit{expiration_date: ~N[2010-04-17 14:00:00]})
+    true
+
+    iex> FacilityPermit.is_expired?(%FacilityPermit{})
+    false
   """
   @spec is_expired?(t()) :: boolean()
   def is_expired?(%__MODULE__{status: :expired}), do: true

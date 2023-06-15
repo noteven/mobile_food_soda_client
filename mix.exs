@@ -68,6 +68,8 @@ defmodule MobileFoodSodaClient.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:norm, "~> 0.13"},
+
       # Test dependencies
       {:hammox, "~> 0.7", only: [:test]},
       {:csv, "~> 3.0", only: [:test]},
