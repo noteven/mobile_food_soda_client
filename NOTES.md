@@ -32,7 +32,18 @@ Once a basic structure for the resulting data is laid out, I set up a test to si
 
 When considering how to best resolve IoC some considerations came to mind. First whether to use application wide configuration similar to `config :your_app, adapter: HttpAdapter`, or call-site configuration in the style of `Client.fetch(HttpAdapter, ...)`. Another possible alternative to an Adapter/behaviour pattern was allowing the user to write a handler function which would then do the actual communication work, similar to `run_finch`[^2] in [req](https://github.com/wojtekmach/req).
 
-A Permit can have one or more locations, and each location has its own work day and hours. I am unsure what CNN, NOISent, LocationID, ScheduleID, and the
-:@computed_region. schedule property URL doesn't load for the cases I've tried so I omitted it.
+A Permit can have one or more facilities, and each facility has has its own location, work day and hours. I am unsure what CNN, NOISent, LocationID, ScheduleID, and the
+:@computed_region. schedule property URL doesn't load for the cases I've tried so I have omitted it.
+
+I want to generalize the concepts the library uses to clients and decoder, in particular the idea that users may wish to switch out data sources, which in turn means switching out clients for reading in data, as well as there being a variety of data encodings. The first step to get an idea of the underlying architecture would be to implement a prototype of it (which might or might not be thrown out) for the specific case of using an HTTP source through the Finch library, with JSON encoded data and work out from there. Ideally there would be support for `Stream` style operations. The general pattern might look as follows:
+
+```elixir
+def run(client, decoder) do
+  client.stream!()
+  |> decoder.decode()
+  |> data_to_permits()
+  |> Enum.to_list()
+end
+```
 
 [^2]: https://github.com/wojtekmach/req/blob/b09c8861af240e48c63e1da2b7d768a97c14e120/lib/req/steps.ex#L611

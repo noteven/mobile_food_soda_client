@@ -8,7 +8,7 @@ defmodule MobileFoodSodaClientTest do
   @csv_file "./support/Mobile_Food_Facility_Permit.csv"
   @json_file "./support/Mobile_Food_Facility_Permit.json"
 
-  describe "from file" do
+  describe "client from file" do
     test "read CSV coded permits" do
       contents = File.stream!(@csv_file)
       {:ok, facility_permits} = MobileFoodSodaClient.fetch(contents, &CSV.decode/1)
@@ -32,6 +32,15 @@ defmodule MobileFoodSodaClientTest do
     end
   end
 
-  describe "from SODA API" do
+  describe "client from SODA API" do
+    test "can fetch permits" do
+      {:ok, facility_permits} = MobileFoodSodaClient.fetch()
+
+      assert length(facility_permits) > 0
+
+      Enum.each(facility_permits, fn permit ->
+        assert %FacilityPermit{} = permit
+      end)
+    end
   end
 end

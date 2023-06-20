@@ -69,6 +69,8 @@ defmodule MobileFoodSodaClient.MixProject do
   defp deps do
     [
       {:norm, "~> 0.13"},
+      {:finch, "~> 0.16"},
+      {:jason, "~> 1.4"},
 
       # Test dependencies
       {:hammox, "~> 0.7", only: [:test]},
