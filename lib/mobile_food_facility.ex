@@ -54,7 +54,7 @@ defmodule MobileFoodSodaClient.MobileFoodFacility do
 
   @spec facility_type_from_json(map() | String.t()) :: {:ok, facility_type()} | {:error, any()}
   defp facility_type_from_json(%{} = data) when is_map(data) do
-    with json_val <- Map.get(data, "facilitytype"),
+    with json_val <- Map.get(data, "facilitytype", ""),
          facility_str <- String.downcase(String.trim(json_val)) do
       facility_type_from_json(facility_str)
     else

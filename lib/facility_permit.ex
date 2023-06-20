@@ -17,7 +17,7 @@ defmodule MobileFoodSodaClient.FacilityPermit do
   Name of the applicant, this can be the name of an individual or business.
   """
   @type applicant() :: String.t()
-  @type status() :: :requested | :expired | :suspended | :issued | :approved
+  @type status() :: :requested | :expired | :suspend | :issued | :approved
   @type received_date :: NaiveDateTime.t()
   @type approved_date :: NaiveDateTime.t() | nil
   @type expiration_date :: NaiveDateTime.t() | nil
@@ -68,7 +68,7 @@ defmodule MobileFoodSodaClient.FacilityPermit do
   Check whether status is a valid permit status value.
   """
   defguard valid_status?(status)
-           when status in [:requested, :expired, :suspended, :issued, :approved]
+           when status in [:requested, :expired, :suspend, :issued, :approved]
 
   @doc """
   Convert a JSON map to a structure instance.
