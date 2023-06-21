@@ -77,6 +77,10 @@ defmodule MobileFoodSodaClient.MixProject do
       {:csv, "~> 3.0", only: [:test]},
       {:excoveralls, "~> 0.10", only: [:test]},
 
+      # Transitive dependency of ExCoveralls, dependency fails to
+      # compile on elixir 1.15 without underlying 'fix'
+      {:ssl_verify_fun, "~> 1.1", manager: :rebar3, override: true},
+
       # Dev dependencies
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.3", only: [:dev, :test], runtime: false}
