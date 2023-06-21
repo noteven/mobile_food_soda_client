@@ -12,10 +12,10 @@ defmodule MobileFoodSodaClient do
   Fetches mobile facility permits and returns populated
   data instances.
   """
-  @spec fetch() :: {:ok, [FacilityPermit.t()]} | {:error, any()}
-  def fetch do
+  @spec fetch(String.t()) :: {:ok, [FacilityPermit.t()]} | {:error, any()}
+  def fetch(url \\ @base_url) do
     request =
-      Finch.build(:get, @base_url)
+      Finch.build(:get, url)
       |> Finch.request(finch_name())
 
     with {:ok, response} <- request,
