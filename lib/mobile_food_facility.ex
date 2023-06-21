@@ -66,5 +66,7 @@ defmodule MobileFoodSodaClient.MobileFoodFacility do
   defp facility_type_from_json("push cart"), do: {:ok, :push_cart}
   defp facility_type_from_json("truck"), do: {:ok, :truck}
   defp facility_type_from_json(""), do: {:ok, nil}
-  defp facility_type_from_json(type) when is_binary(type), do: {:error, "unrecognized facility type #{type}"}
+
+  defp facility_type_from_json(type) when is_binary(type),
+    do: {:error, "unrecognized facility type #{type}"}
 end

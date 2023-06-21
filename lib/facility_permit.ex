@@ -8,6 +8,8 @@ defmodule MobileFoodSodaClient.FacilityPermit do
 
   alias MobileFoodSodaClient.MobileFoodFacility
 
+  @status ~w(requested expired suspend issued approved)a
+
   @typedoc """
   Permit identifier, eg: 22MFF-00036.
   """
@@ -17,7 +19,7 @@ defmodule MobileFoodSodaClient.FacilityPermit do
   Name of the applicant, this can be the name of an individual or business.
   """
   @type applicant() :: String.t()
-  @type status() :: :requested | :expired | :suspend | :issued | :approved
+  @type status() :: unquote(Enum.reduce(@status, &{:|, [], [&1, &2]}))
   @type received_date :: NaiveDateTime.t()
   @type approved_date :: NaiveDateTime.t() | nil
   @type expiration_date :: NaiveDateTime.t() | nil
@@ -68,7 +70,7 @@ defmodule MobileFoodSodaClient.FacilityPermit do
   Check whether status is a valid permit status value.
   """
   defguard valid_status?(status)
-           when status in [:requested, :expired, :suspend, :issued, :approved]
+           when status in @status
 
   @doc """
   Convert a JSON map to a structure instance.
@@ -102,10 +104,10 @@ defmodule MobileFoodSodaClient.FacilityPermit do
   defp status_from_json(%{} = data) do
     with json <- Map.get(data, "status"),
          status_atom <- String.to_existing_atom(String.downcase(String.trim(json))) do
-          case status_atom do
-            atom when valid_status?(atom) -> {:ok, atom}
-            atom -> {:error, "Unknown status #{atom}"}
-          end
+      case status_atom do
+        atom when valid_status?(atom) -> {:ok, atom}
+        atom -> {:error, "Unknown status #{atom}"}
+      end
     else
       err ->
         {:error, err}
@@ -114,6 +116,7 @@ defmodule MobileFoodSodaClient.FacilityPermit do
 
   @spec received_date(binary() | nil) :: {:ok, NaiveDateTime.t()} | {:error, any()}
   def received_date(nil), do: {:error, "no received date"}
+
   def received_date(<<y::32, m::16, d::16>>) do
     {year, ""} = Integer.parse(<<y::32>>)
     {month, ""} = Integer.parse(<<m::16>>)
@@ -124,5 +127,7 @@ defmodule MobileFoodSodaClient.FacilityPermit do
 
   @spec datetime_from_json(String.t() | nil) :: {:ok, NaiveDateTime.t() | nil} | {:error, any()}
   def datetime_from_json(nil), do: {:ok, nil}
-  def datetime_from_json(datetime) when is_binary(datetime), do: NaiveDateTime.from_iso8601(datetime)
+
+  def datetime_from_json(datetime) when is_binary(datetime),
+    do: NaiveDateTime.from_iso8601(datetime)
 end

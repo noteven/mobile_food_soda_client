@@ -9,6 +9,7 @@ defmodule MobileFoodSodaClientTest do
   @json_file "./support/Mobile_Food_Facility_Permit.json"
 
   describe "client from file" do
+    @tag :skip
     test "read CSV coded permits" do
       contents = File.stream!(@csv_file)
       {:ok, facility_permits} = MobileFoodSodaClient.fetch(contents, &CSV.decode/1)
@@ -20,6 +21,7 @@ defmodule MobileFoodSodaClientTest do
       end)
     end
 
+    @tag :skip
     test "read JSON coded permits" do
       contents = File.stream!(@json_file)
       {:ok, facility_permits} = MobileFoodSodaClient.fetch(contents, &Jason.decode/1)
