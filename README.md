@@ -1,7 +1,7 @@
 # MobileFoodSodaClient
 [![Elixir CI](https://github.com/noteven/mobile_food_soda_client/actions/workflows/elixir.yml/badge.svg?branch=main)](https://github.com/noteven/mobile_food_soda_client/actions/workflows/elixir.yml)
 
-Elixir client for San Franciscos' [Mobile Food Facility Permit data-set](https://data.sfgov.org/resource/rqzj-sfat.json) SODA API.
+Elixir client for San Franciscos' [Mobile Food Facility Permit dataset](https://data.sfgov.org/resource/rqzj-sfat.json) SODA API.
 
 ## Installation
 

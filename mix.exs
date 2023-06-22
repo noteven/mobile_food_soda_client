@@ -3,7 +3,7 @@ defmodule MobileFoodSodaClient.MixProject do
 
   @description """
   Client library for accessing City of San Fanciscos SODA API for Mobile Food
-  Facility Permit data-set.
+  Facility Permit dataset.
   """
   @version "0.0.1"
   @repo_url "https://github.com/noteven/mobile_food_soda_client"
@@ -36,7 +36,7 @@ defmodule MobileFoodSodaClient.MixProject do
   def docs do
     [
       name: "MobileFoodSODAClient",
-      extras: ["README.md"],
+      extras: ["README.md", "NOTES.md", "LICENSE"],
       main: "README",
       source_url: @repo_url
     ]
@@ -48,7 +48,7 @@ defmodule MobileFoodSodaClient.MixProject do
       description: @description,
       maintainers: [],
       licenses: ["MIT"],
-      files: ["lib/*", "mix.exs", "README*", "LICENSE*"],
+      files: ["lib/*", "mix.exs", "README*", "LICENSE*", "NOTES*"],
       links: %{
         "GitHub" => @repo_url
       }
@@ -68,9 +68,18 @@ defmodule MobileFoodSodaClient.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:norm, "~> 0.13"},
+      {:finch, "~> 0.16"},
+      {:jason, "~> 1.4"},
+
       # Test dependencies
-      {:propcheck, "~> 1.4", only: [:test, :dev]},
+      {:hammox, "~> 0.7", only: [:test]},
+      {:csv, "~> 3.0", only: [:test]},
       {:excoveralls, "~> 0.10", only: [:test]},
+
+      # Transitive dependency of ExCoveralls, dependency fails to
+      # compile on elixir 1.15 without underlying 'fix'
+      {:ssl_verify_fun, "~> 1.1", manager: :rebar3, override: true},
 
       # Dev dependencies
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
