@@ -5,8 +5,7 @@
 
 version: 2
 updates:
-  - &base_def
-    package-ecosystem: "mix"
+  - package-ecosystem: "mix"
     directory: "/"
     schedule:
       # Check for updates to GitHub Actions every weekday
@@ -17,4 +16,11 @@ updates:
       - "noteven"
 
   - package-ecosystem: "github-actions" # See documentation for possible values
-    <<: *base_def
+    directory: "/"
+    schedule:
+      # Check for updates to GitHub Actions every weekday
+      interval: "weekly"
+    pull-request-branch-name:
+      separator: "-"
+    assignees:
+      - "noteven"
